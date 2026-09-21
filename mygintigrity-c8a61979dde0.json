@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "mygintigrity",
+  "private_key_id": "c8a61979dde03e620c77df2d4897918e766ae72c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDCRj5hEZKgg28y\nIcdfASXScH+5GwLKEKjselcOqhmJLh29RMI9mcnVXVam4YAoBNOHNnXLMV4SzH1l\ngEompU5UlaiFqMhdLVa4+SoKcPPhXCQ1tMfSjAS1CGqjw+oOOSOGdY00qr5SDjkZ\nrMgSnIG2dJS3ye6vdvpxN5hrYq0/iGL0oLlbacg3G12NIWuVWVNu02d6uqdYavnZ\n9EiYvH6QnSNK5cr3J0GyBTeHFj7iL+p18oRh3Eng6T8Szyl/uRYbHR0qJQ9NldtW\naxRbDa4NPMEsXFU8xKNQPMV0kfwDBkVaJg5e2GjjP8gx1kT+9/NTOKiazyYzrjz4\n7WV2FHrJAgMBAAECggEAI//AL1yCPxwbzr5To1cjGwudnz9SFP9hTfCdkSoT8UeK\nWzgShjepHtBc7i96/+9lAvkkerJ7LCCYW+aZ1u9qxGG3CI1uE1YDa+M/1w93IZth\nWlJVdL5dYO5eVFpJVLlhy9icgdXhznK0Qf2yVUCLCLQxmpzgjcMORUx4Ae4XDF52\nW7YvupIJMgGzM7aQyqN/3LZ1J7BaRck0panSjbzUDC3JxqA0UQoG2c+x8YJlE1SX\nBTcgd9I9N+YTAENjDzIkUy8AXaLrit6kKFgDjZ6uQoliHVaHOtgl7SUtQ91QZV87\nsuSg4yAPdee+zyfMPIchxL4nWxAz3ib8Z9dzYs6lwQKBgQD30WkhRJwG4qfJ5ZxU\nfb6eeERyomLZ5Lf2OeFuZrtTPtYIpc6peqsnx15mqXdP+3BSs3qQ9aEf4K3U0A7H\nahMIXHIuYqtNDWDC2T5/yC+fVDaT+6RosfavVMUoann+j9yhN7PT+Q7HlEa0zIhR\n5z+9F8aHr2fkpZmYIhSKCdYp0wKBgQDIsEaH4iZhyvJJVl2IZRbxq4w4AQnZIKdT\nlfzBagHOYD4KXLNmmonDfZH+X7jD8gMrSL9V7rQkulgxIDazUOa9BW14zM2Mqz/o\nyM6QaFKCDIKJdwdtW0KjQmaHmY3zRk+7XMouF4RulwAPM+vlgpF1upqvZa3Fd+2i\nKmmnQ7nrcwKBgQDRKkQUm0ciHJ5IL2/CdJu2P4ZuRxcuF/kZbwMR3s3PVmLqy5/h\ntjLOEV1hQzn8HRpSA0C5J0kGkenGjJFcyPAlh3msIwW4tEjuTNSOn9VqIncqciPz\nZfnzRJZgJXawYJZ00IIMsNNDqqf/I/8POiK3JGEh1u/Wsdsw59r0I5dKlwKBgDq+\n3uaH3JRjw+iTz21Nqhm0DaeXJjrYxCJDlWlIjp7KrV57JEi0k/8VktbTTlKNVUAm\nW1vcM/9MTOSUeW6kD+bk39asnL7AokSSA2ViJETNRKjYnuP0At2nYjvvRw4fVteR\nod08JRf6O5o3qKXWQp4jsYQGT4euQ3Fk2OiNeq7hAoGBAKS7ptLpoFimJvSHKyNE\nL5KKIntfAdZpHYR1oUHXlgwY0mZ9ozaejJ/FT//7+TLn82teU4Y75Shf3SdUiRjr\napihEtmVDDO8YOJjKKgDXQ9i2j69K0mH5DEJLEynw1aBzHhyJtzqLzpgkFhXhgG1\nz4wkl64QlQ+FR4cgI6TaXb7V\n-----END PRIVATE KEY-----\n",
+  "client_email": "mygoogleplayintigrity@mygintigrity.iam.gserviceaccount.com",
+  "client_id": "115983173969335134851",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mygoogleplayintigrity%40mygintigrity.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
