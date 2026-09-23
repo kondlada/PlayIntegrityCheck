@@ -25,7 +25,18 @@ export async function GET(request: Request) {
 // POST: Verify Play Integrity token
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    let body;
+    
+    // Try to parse as JSON
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      // If JSON parsing fails, try reading as text and parsing manually
+      const text = await request.text();
+      console.error('Raw body text:', text);
+      body = JSON.parse(text);
+    }
+    
     const { integrityToken, expectedUserId } = body;
 
     if (!integrityToken) {
