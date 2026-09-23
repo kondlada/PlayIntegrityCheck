@@ -44,139 +44,34 @@ export async function GET(request: Request) {
   }
 }
 
-// POST: Verify Play Integrity token
+// POST: Test endpoint - just echo body
 export async function POST(request: Request) {
   try {
-    console.warn('[POST] Verification request received');
+    console.warn('[POST] TEST - Request received');
     
-    // Step 1: Parse request body
-    let body;
-    try {
-      console.warn('[POST] Parsing request body');
-      body = await request.json();
-      console.warn('[POST] Request body parsed successfully');
-    } catch (parseError: any) {
-      console.warn('[POST] JSON parse error: ' + parseError.message);
-      return NextResponse.json(
-        { error: '[REQUEST_PARSE_ERROR] Failed to parse request body as JSON', details: parseError.message },
-        { status: 400 }
-      );
-    }
+    // STEP 1: Test parsing body
+    console.warn('[POST] TEST - Attempting to parse JSON body');
+    const body = await request.json();
+    console.warn('[POST] TEST - Body parsed successfully');
+    console.warn('[POST] TEST - Body keys:', Object.keys(body));
     
-    // Step 2: Validate required fields
-    const { integrityToken, expectedUserId } = body;
-    console.warn('[POST] Extracted fields - token present: ' + (!!integrityToken) + ', userId: ' + expectedUserId);
-    
-    if (!integrityToken) {
-      console.warn('[POST] Missing integrityToken');
-      return NextResponse.json(
-        { error: '[MISSING_TOKEN] Request missing integrityToken field' },
-        { status: 400 }
-      );
-    }
-
-    // Step 3: Decode and initialize Google Auth
-    console.warn('[POST] Decoding GCP credentials');
-    let credentials;
-    try {
-      credentials = getGcpCredentials();
-      console.warn('[POST] Credentials ready');
-    } catch (decodeError: any) {
-      console.warn('[POST] Credentials decode error: ' + decodeError.message);
-      return NextResponse.json(
-        { error: decodeError.message },
-        { status: 500 }
-      );
-    }
-
-    console.warn('[POST] Initializing Google Auth');
-    let auth;
-    try {
-      auth = new GoogleAuth({
-        credentials,
-        scopes: ['https://www.googleapis.com/auth/playintegrity'],
-      });
-      console.warn('[POST] Google Auth initialized');
-    } catch (authError: any) {
-      console.warn('[POST] Auth init error: ' + authError.message);
-      return NextResponse.json(
-        { error: '[AUTH_INIT_ERROR] Failed to initialize Google Auth', details: authError.message },
-        { status: 500 }
-      );
-    }
-
-    // Step 4: Get authenticated client
-    console.warn('[POST] Getting auth client');
-    let authClient;
-    try {
-      authClient = await auth.getClient();
-      console.warn('[POST] Auth client ready');
-    } catch (clientError: any) {
-      console.warn('[POST] Auth client error: ' + clientError.message);
-      return NextResponse.json(
-        { error: '[CLIENT_ERROR] Failed to get authenticated client', details: clientError.message },
-        { status: 500 }
-      );
-    }
-
-    // Step 5: Create Play Integrity client
-    console.warn('[POST] Creating Play Integrity client');
-    let client;
-    try {
-      client = playintegrity({ version: 'v1', auth: authClient as any });
-      console.warn('[POST] Play Integrity client created');
-    } catch (clientInitError: any) {
-      console.warn('[POST] Play Integrity client error: ' + clientInitError.message);
-      return NextResponse.json(
-        { error: '[PLAYINTEGRITY_CLIENT_ERROR] Failed to create Play Integrity client', details: clientInitError.message },
-        { status: 500 }
-      );
-    }
-
-    // Step 6: Call Google Play Integrity API
-    console.warn('[POST] Calling decodeIntegrityToken (packageName: com.orgname.PushNotification)');
-    let response;
-    try {
-      const packageName = 'com.orgname.PushNotification';
-      response = await client.v1.decodeIntegrityToken({
-        packageName,
-        requestBody: { integrityToken },
-      });
-      console.warn('[POST] Play Integrity API call successful');
-    } catch (apiError: any) {
-      console.warn('[POST] Play Integrity API error: ' + apiError.message);
-      return NextResponse.json(
-        { error: '[PLAYINTEGRITY_API_ERROR] Failed to decode integrity token', details: apiError.message },
-        { status: 500 }
-      );
-    }
-
-    // Step 7: Extract and validate nonce
-    console.warn('[POST] Extracting payload and validating nonce');
-    const payload = response.data.tokenPayloadExternal;
-    const receivedNonce = payload?.requestDetails?.nonce;
-    console.warn('[POST] Received nonce (length: ' + (receivedNonce ? receivedNonce.length : 0) + ')');
-
-    let nonceValid = true;
-    if (expectedUserId) {
-      const expectedNonce = crypto.createHmac('sha256', getSecret())
-        .update(expectedUserId)
-        .digest('base64url');
-      nonceValid = receivedNonce === expectedNonce;
-      console.warn('[POST] Nonce validation result: ' + nonceValid);
-    }
-
-    console.warn('[POST] Verification complete, returning success response');
+    // Just echo back what we got
     return NextResponse.json({
       success: true,
-      nonceValid,
-      receivedNonce,
-      payload,
+      message: 'POST endpoint works - body received',
+      received: body
     });
+    
+    // TODO: Comment back in step by step
+    // Step 2: Validate token
+    // Step 3: Decode credentials
+    // Step 4: Call Google API
+    
   } catch (error: any) {
-    console.warn('[POST] Unexpected error: ' + error.message);
+    console.warn('[POST] TEST - Error:', error.message);
+    console.warn('[POST] TEST - Error stack:', error.stack);
     return NextResponse.json(
-      { error: '[UNEXPECTED_ERROR] Internal server error', details: error.message },
+      { error: 'Test failed', details: error.message },
       { status: 500 }
     );
   }
