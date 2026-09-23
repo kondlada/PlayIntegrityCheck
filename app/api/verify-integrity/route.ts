@@ -5,20 +5,18 @@ import crypto from 'crypto';
 
 const getSecret = () => process.env.HMAC_SECRET || 'fallback-secret-key-change-in-env';
 
-// Hardcoded GCP credentials
-const GCP_CREDENTIALS ={
-                         "type": "service_account",
-                         "project_id": "mygintigrity",
-                         "private_key_id": "dd8cd5b7c5f2252fe6beee2307896abea8bf0953",
-                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzLhdtIu5d9VEm\n67yT4sWfY03hCjBdEwe40Rp+0EKsO3eQdLDxgOAlr8r43CNxZNss+sh7TQ3kdl2B\n3CRikm/Suv+e2vim8+mmdWoSjbD8P1Xm5jc03qHudE3u475oS2kvUqvTv70cxsZd\nEhO/1o3aGsPpAf5Var+eg6hKai8h9ml+YwKYwEqcJz/cWt5z0jUYrvdVgc+AB66j\nc6bN17UW1LbRvWdGZlZteWZWVhdy7oBKLvLYFd/mu4xAUIXSY4a4vErxyJBW53sC\n8KJZWHvFQH+mzF7FwABe+jD2vh6PF/o7pdYHtV/AUY/zXDSYmehnnpr3IPyW9f/1\ntOZGeQsNAgMBAAECggEAA1yAjKt4Fmde9SQSUlqRuPYS8vEH4Txx0sBReNCpzcGR\nKzKxqGm42PiWf9sZXOThW7b9kH4lc1mh/W//dy+0vuHYvKoOuhlJ9nyuEGbRL0Tn\nkU7GTpPvEDBzedMElfj1FBVpuVhtJlhFm7SyxtCj6wz6KBtsPpMVTyvY5LR8Iol+\ntt44eWlgaLKmkw136VEedTkJk32RdGYDTnAmJUFtH+LLs0DQiubd+neyTHICsOxS\nS5ACKbEpiOQQCam2Z3eM60AcFsjK1YKxIL82mHiAxCOrwLrUZQHdbg8MF2Nz9j/u\nw8iprUjh3UDpOsLyrb97UlhTSZz1W9/ni3jkMzb3HQKBgQDXKJ4HB9DU9DelKviw\ngP1aqOMVpmTv+TDyDM13a2Bdvu/6lvqo3CNL9gQaT3DjjLkV1IzAhEN2oXbpSNok\njCM83uTkSFro7N47OqRRVfPzR0gbCLq2908SgpcBC22hqziBCZs6v+T6dDXpOXH2\nlLPuo1tckILQGLAB7RI24f73IwKBgQDVMSK0bhm4XWEZYMq3Kqzrz2JC4lomE0rw\n399TQPY7g95X5s8AjPMzRz20HAYHB3nCrZsU5DE+qoaWztdgFIqROIINDhJSskvL\nUR90LSfkAAT0iFawy0ODwHqF9r71ccPSpu2XMkYOvYVxuGukkjKcWzqwxmVhdpVs\naBiteSYwDwKBgC2z6gVySpDBo4RJIXRUofx8/Wee5bf3xcbUo1xniZvAMDeZlHsD\n79d11Z9FGqSrQrF5acCHF9F+MMUS/Ytf3ShT7Gj1WaI6lmYcacUBLgWSMaXUb9zn\noXs8FBlbtRjvRtxaDwgmtNvijYUR97w6EBJzzrdV1wOfCtwN4J2Z2c/jAoGBAL7n\nAdmpoZRq4bD08HE2YKPED4wu3mSr7/Zjsbn+OL+wZKA3yPMIRBqN1535XhhbRFfk\nVzNM5x/jWSOf0lJx8mb5v9Lq39N3XtGQMec5LDhJICbMEzy6txk6eTyOaA6nMZ/m\n5Gf4l61JXj4n0xQJ6hICyzpSXaP5qPHrAPYNvvlXAoGAID9rRsM4vHuayYL/bz9U\npylP+kyvxfnO94O7RN0lm7Eo2TrO2CYTUC+ghExPEKWZmIf9AJEQR9eT2lMtKfzr\nt6+tFfbkhW1oaQtUn4V3sMK1wS9XmkskivgYa9OwtT0izv5U6ipXpSzNi4r1zY5C\nw9ZVUxd1OWsR5dCV/9AbnmI=\n-----END PRIVATE KEY-----\n",
-                         "client_email": "mygoogleplayintigrity@mygintigrity.iam.gserviceaccount.com",
-                         "client_id": "115983173969335134851",
-                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                         "token_uri": "https://oauth2.googleapis.com/token",
-                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mygoogleplayintigrity%40mygintigrity.iam.gserviceaccount.com",
-                         "universe_domain": "googleapis.com"
-                       };
+// Base64-encoded GCP credentials (new credentials - decode at runtime for security)
+const GCP_CREDENTIALS_BASE64 = 'ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAibXlnaW50aWdyaXR5IiwKICAicHJpdmF0ZV9rZXlfaWQiOiAiZGQ4Y2Q1YjdjNWYyMjUyZmU2YmVlZTIzMDc4OTZhYmVhOGJmMDk1MyIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlJRXZRSUJBREFOQmdrcWhraUc5dzBCQVFFRkFBU0NCS2N3Z2dTakFnRUFBb0lCQVFDekxoZHRJdTVkOVZFbVxuNjd5VDRzV2ZZMDNoQ2pCZEV3ZTQwUnArMEVLc08zZVFkTER4Z09BbHI4cjQzQ054Wk5zcytzaDdUUTNrZGwyQlxuM0NSaWttL1N1ditlMnZpbTgrbW1kV29TamJEOFAxWG01amMwM3FIdWRFM3U0NzVvUzJrdlVxdlR2NzBjeHNaZFxuRWhPLzFvM2FHc1BwQWY1VmFyK2VnNmhLYWk4aDltbCtZd0tZd0VxY0p6L2NXdDV6MGpVWXJ2ZFZnYytBQjY2alxuYzZiTjE3VVcxTGJSdldkR1psWnRlV1pXVmhkeTdvQktMdkxZRmQvbXU0eEFVSVhTWTRhNHZFcnh5SkJXNTNzQ1xuOEtKWldIdkZRSCttekY3RndBQmUrakQydmg2UEYvbzdwZFlIdFYvQVVZL3pYRFNZbWVobm5wcjNJUHlXOWYvMVxudE9aR2VRc05BZ01CQUFFQ2dnRUFBMXlBakt0NEZtZGU5U1FTVWxxUnVQWVM4dkVINFR4eDBzQlJlTkNwemNHUlxuS3pLeXhxR200MlBpV2Y5c1pYT1RoVzdiOWtINGxjMW1oL1cvL2R5KzB2dUhZdktvT3VobEo5bnl1RUdiUkwwVG5cbiEtLVRQ0VlHQ1RwUHZFREJ6ZWRNRWxmajFGQlZwdVZodEpsaEZtN1N5eHRDajZ3ejZLQnRzUHBNVlR5dlk1TFI4SW9sK1xudHQ0NGVXbGdhTEtta3cxMzZWRWVkVGtKazMyUmRHWURUbkFtSlVGdEgrTExzMERRaXViZCtuZXlUSElDc094U1xuUzVBQ0tiRXBpT1FRQ2FtMlozZU02MEFjRnNqSzFZS3hJTDgybUhpQXhDT3J3THJVWlFIZGJnOE1GMk56OWovdVxudzhpcHJVamgzVURwT3NMeXJiOTdVbGhUU1p6MVc5L25pM2prTXpiM0hRS0JnUURYS0o0SEI5RFU5RGVsS3Zpd1xuZ1AxYXFPTVZwbVR2K1REeURNMTNhMkJkdnUvNmx2cW8zQ05MOWdRYVQzRGpqTGtWMUl6QWhFTjJvWGJwU05va1xuakNNODN1VGtTRnJvN040N09xUlJWZlB6UjBnYkNMcTI5MDhTZ3BjQkMyMmhxemlCQ1pzNnYrVDZkRFhwT1hIMlxubExQdW8xdGNrSUxRR0xBQjdSSTI0ZjczSXdLQmdRRFZNU0swYmhtNFhXRVpZTXEzS3F6cnoySkM0bG9tRTByd1xuMzk5VFFQWTdnOTVYNXM4QWpQTXpSejIwSEFZSEIzbkNyWnNVNURFK3FvYVd6dGRnRklxUk9JSU5EaEpTc2t2TFxuVVI5MExTZmtBQVQwaUZhd3kwT0R3SHFGOXI3MWNjUFNwdTJYTWtZT3ZZVnh1R3Vra2pLY1d6cXd4bVZoZHBWc1xuYUJpdGVTWXdEd0tCZ0MyejZnVnlTcERCbzRSSklYUlVvZng4L1dlZTViZjN4Y2JVbzF4bmladkFNRGVabEhzRFxuNzlkMTFaOUZHcVNyUXJGNWFjQ0hGOUYrTU1VUy9ZdGYzU2hUN0dqMVdhSTZsbVljYWNVQkxnV1NNYVhVYjl6blxub1hzOEZCbGJ0Ump2UnR4YUR3Z210TnZpallVUjk3dzZFQkp6enJkVjF3T2ZDdHdONEoyWjJjL2pBb0dCQUw3blxuQWRtcG9aUnE0YkQwOEhFMllLUEVENHd1M21TcjcvWmpzYm4rT0wrd1pLQTN5UE1JUkJxTjE1MzVYaGhiUkZma1xuVnpOTTV4L2pXU09mMGxKeDhtYjV2OUxxMzlOM1h0R1FNZWM1TERoSklDYk1Fenk2dHhrNmVUeU9hQTZuTVovbVxuNUdmNGw2MUpYajRuMHhRSjZoSUN5enBTWGFQNXFQSHJBUFlOdnZsWEFvR0FJRDlyUnNNNHZIdWF5WUwvYno5VVxucHlsUCtreXZ4Zm5POTRPN1JOMGxtN0VvMlRyTzJDWVRVQytnaEV4UEVLV1ptSWY5QUpFUVI5ZVQybE10S2Z6clxudDYrdEZmYmtoVzFvYVF0VW40VjNzTUsxd1M5WG1rc2tpdmdZYTlPd3RUMGl6djVVNmlwWHBTek5pNHIxelk1Q1xudzlaVlV4ZDFPV3NSNWRDVi85QWJubUk9XG4tLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tXG4iLAogICJjbGllbnRfZW1haWwiOiAibXlnb29nbGVwbGF5aW50aWdyaXR5QG15Z2ludGlncml0eS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTU5ODMxNzM5NjkzMzUxMzQ4NTEiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L215Z29vZ2xlcGxheWludGlncml0eSU0MG15Z2ludGlncml0eS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgInVuaXZlcnNlX2RvbWFpbiI6ICJnb29nbGVhcGlzLmNvbSIKfQo=';
+
+// Decode base64 credentials at runtime
+const getGcpCredentials = () => {
+  try {
+    const decoded = Buffer.from(GCP_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+    return JSON.parse(decoded);
+  } catch (error: any) {
+    throw new Error(`[CREDENTIALS_DECODE_ERROR] Failed to decode GCP credentials: ${error.message}`);
+  }
+};
 
 // GET: Generate/retrieve deterministic HMAC nonce
 export async function GET(request: Request) {
@@ -60,11 +58,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Step 3: Initialize Google Auth with hardcoded credentials
+    // Step 3: Decode and initialize Google Auth
+    let credentials;
+    try {
+      credentials = getGcpCredentials();
+    } catch (decodeError: any) {
+      return NextResponse.json(
+        { error: decodeError.message },
+        { status: 500 }
+      );
+    }
+
     let auth;
     try {
       auth = new GoogleAuth({
-        credentials: GCP_CREDENTIALS,
+        credentials,
         scopes: ['https://www.googleapis.com/auth/playintegrity'],
       });
     } catch (authError: any) {
