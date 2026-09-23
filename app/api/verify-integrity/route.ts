@@ -2,8 +2,24 @@ import { NextResponse } from 'next/server';
 import { playintegrity } from '@googleapis/playintegrity';
 import { GoogleAuth } from 'google-auth-library';
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
 const getSecret = () => process.env.HMAC_SECRET || 'fallback-secret-key-change-in-env';
+
+// Load credentials from file (root folder)
+const loadCredentials = () => {
+  try {
+    const credPath = path.join(process.cwd(), 'mygintigrity-771dc1cb7fc2.json');
+    const credentialsJson = fs.readFileSync(credPath, 'utf-8');
+    const credentials = JSON.parse(credentialsJson);
+    console.log('Credentials loaded from file:', credPath);
+    return credentials;
+  } catch (error: any) {
+    console.error('Failed to load credentials from file:', error.message);
+    throw new Error(`Failed to load GCP credentials: ${error.message}`);
+  }
+};
 
 // GET: Generate/retrieve deterministic HMAC nonce
 export async function GET(request: Request) {
@@ -43,11 +59,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing integrityToken' }, { status: 400 });
     }
 
-    if (!process.env.GCP_SERVICE_ACCOUNT_KEY) {
-      return NextResponse.json({ error: 'GCP_SERVICE_ACCOUNT_KEY is missing' }, { status: 500 });
-    }
+    // Load credentials from file
+    const credentials = loadCredentials();
 
-    const credentials = JSON.parse(process.env.GCP_SERVICE_ACCOUNT_KEY);
     const auth = new GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/playintegrity'],
@@ -56,7 +70,7 @@ export async function POST(request: Request) {
     const authClient = await auth.getClient();
     const client = playintegrity({ version: 'v1', auth: authClient as any });
 
-    const packageName = process.env.ANDROID_PACKAGE_NAME!;
+    const packageName = credentials.project_id ? 'com.orgname.PushNotification' : process.env.ANDROID_PACKAGE_NAME!;
     const response = await client.v1.decodeIntegrityToken({
       packageName,
       requestBody: { integrityToken },
