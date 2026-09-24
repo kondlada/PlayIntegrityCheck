@@ -17,7 +17,7 @@ const getGcpCredentials = () => {
 
     let decoded = Buffer.from(GCP_CREDENTIALS_BASE64, 'base64').toString('utf-8').trim();
 
-    // 🔧 Strip surrounding single or double quotes if present
+    // ? Strip surrounding single or double quotes if present
     if (
       (decoded.startsWith("'") && decoded.endsWith("'")) ||
       (decoded.startsWith('"') && decoded.endsWith('"'))
@@ -61,25 +61,16 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     console.warn('[POST] TEST - Request received');
-    
-    // STEP 1: Test parsing body
-    console.warn('[POST] TEST - Attempting to parse JSON body');
-    const body = await request.json();
-    console.warn('[POST] TEST - Body parsed successfully');
-    console.warn('[POST] TEST - Body keys:', Object.keys(body));
-    
-    // Just echo back what we got
+    console.warn('[POST] TEST - Returning dummy JSON response');
     return NextResponse.json({
       success: true,
-      message: 'POST endpoint works - body received',
-      received: body
+      message: 'dummy response from play integrity test endpoint',
+      data: {
+        status: 'ok',
+        source: 'appintegrity_test',
+        timestamp: new Date().toISOString(),
+      },
     });
-    
-    // TODO: Comment back in step by step
-    // Step 2: Validate token
-    // Step 3: Decode credentials
-    // Step 4: Call Google API
-    
   } catch (error: any) {
     console.warn('[POST] TEST - Error:', error.message);
     console.warn('[POST] TEST - Error stack:', error.stack);
